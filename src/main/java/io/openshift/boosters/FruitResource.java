@@ -133,9 +133,9 @@ public class FruitResource {
         return Response
                 .status(code)
                 .entity(Json.createObjectBuilder()
-                                .add("error", message)
-                                .add("code", code)
-                                .build()
+                            .add("error", message)
+                            .add("code", code)
+                            .build()
                 )
                 .build();
     }
