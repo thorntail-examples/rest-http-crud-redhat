@@ -2,11 +2,18 @@ apiVersion: v1
 kind: Template
 metadata:
   name: thorntail-rest-http-crud
+  annotations:
+    iconClass: icon-jboss
+    tags: thorntail, java, microservice
+    template.openshift.io/provider-display-name: "Red Hat, Inc."
+    template.openshift.io/documentation-url: "https://launcher.fabric8.io/docs/thorntail-runtime.html#mission-crud-wf-swarm"
+    description: >-
+      The Relational Database Backend example expands on the REST API Level 0 example to show how to perform create, read, update and delete (CRUD) operations on a PostgreSQL database using a simple HTTP API.
 parameters:
 - name: SOURCE_REPOSITORY_URL
   description: The source URL for the application
   displayName: Source URL
-  value: https://github.com/wildfly-swarm-openshiftio-boosters/wfswarm-rest-http-crud.git
+  value: https://github.com/thorntail-examples/rest-http-crud-redhat.git
   required: true
 - name: SOURCE_REPOSITORY_REF
   description: The branch name for the application
@@ -83,7 +90,7 @@ objects:
   metadata:
     labels:
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
     name: my-database-secret
   stringData:
     user: luke
@@ -94,7 +101,7 @@ objects:
     labels:
       expose: "true"
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
     name: thorntail-rest-http-crud
   spec:
     ports:
@@ -104,20 +111,20 @@ objects:
       targetPort: 8080
     selector:
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     labels:
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
     name: thorntail-rest-http-crud
   spec:
     replicas: 1
     revisionHistoryLimit: 2
     selector:
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
     strategy:
       rollingParams:
         timeoutSeconds: 3600
@@ -126,7 +133,7 @@ objects:
       metadata:
         labels:
           app: thorntail-rest-http-crud
-          group: io.openshift.boosters
+          group: io.thorntail.example
       spec:
         containers:
         - env:
@@ -143,9 +150,9 @@ objects:
           - name: GC_MAX_METASPACE_SIZE
             value: "150"
           - name: JAVA_OPTIONS
-            value: -Dswarm.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(MY_DATABASE_SERVICE_HOST):$(MY_DATABASE_SERVICE_PORT)/my_data
-              -Dswarm.datasources.data-sources.MyDS.user-name=$(DB_USERNAME) -Dswarm.datasources.data-sources.MyDS.password=$(DB_PASSWORD)
-              -Dswarm.datasources.data-sources.MyDS.driver-name=postgresql
+            value: -Dthorntail.datasources.data-sources.MyDS.connection-url=jdbc:postgresql://$(MY_DATABASE_SERVICE_HOST):$(MY_DATABASE_SERVICE_PORT)/my_data
+              -Dthorntail.datasources.data-sources.MyDS.user-name=$(DB_USERNAME) -Dthorntail.datasources.data-sources.MyDS.password=$(DB_PASSWORD)
+              -Dthorntail.datasources.data-sources.MyDS.driver-name=postgresql
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
@@ -192,7 +199,7 @@ objects:
   metadata:
     labels:
       app: thorntail-rest-http-crud
-      group: io.openshift.boosters
+      group: io.thorntail.example
     name: thorntail-rest-http-crud
   spec:
     port:
